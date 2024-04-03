@@ -1,8 +1,22 @@
-﻿@{
+﻿@model UserViewModel
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core
+        @Model.Username is logged in.</p>
+    
+    
+    </a>.</p>
+</div>
+
+
+<div>
+    <form method="post" asp-controller="User" asp-action="ObtainUserInfo">
+        <input type="hidden" name="userId" value="1" />
+        <input type="submit" value="Obtain User Info" />
+    </form>
 </div>

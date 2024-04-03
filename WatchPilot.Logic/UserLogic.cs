@@ -7,18 +7,32 @@ using WatchPilot.Data;
 
 namespace WatchPilot.Logic
 {
-    public class UserLogic
+    public class UserLogic : IUserLogic
     {
-        public void ObtainUser(int id)
+
+        UserDAO userDAO = new UserDAO();
+
+        private User UserDTOToUser(UserDTO userDTO)
         {
-            User user = new User();
-            UserDAO userDAO = new UserDAO();
-            UserDTO userDTO = new UserDTO();
-            userDTO = userDAO.Get(id);
+            User user = new User
+            {
+                UserID = userDTO.UserID,
+                Username = userDTO.Username
+            };
 
-            user.UserID = userDTO.UserID;
-            user.Username = userDTO.Username;
-
+            return user;
         }
+
+
+
+        public User ObtainUser(int id)
+        {
+            
+            UserDTO userDTO = userDAO.Get(id);
+            return UserDTOToUser(userDTO);
+            
+        }
+
+
     }
 }

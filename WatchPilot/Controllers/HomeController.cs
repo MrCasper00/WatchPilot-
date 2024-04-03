@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
-using WatchPilot.Data;
+using WatchPilot.Logic;
 using WatchPilot.Models;
 
 namespace WatchPilot.Controllers
@@ -9,17 +9,25 @@ namespace WatchPilot.Controllers
     {
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        private readonly IUserLogic _UserLogic;
+
+        public HomeController(ILogger<HomeController> logger, IUserLogic userLogic)
         {
             _logger = logger;
+            _UserLogic = userLogic;
         }
 
         public IActionResult Index()
         {
-            UserDAO userDAO = new UserDAO();
-            userDAO.Get(1);
-            return View();
+            UserViewModel ViewModel = new UserViewModel();
+
+
+
+
+            return View(ViewModel);
         }
+
+        
 
         public IActionResult Privacy()
         {
