@@ -1,9 +1,11 @@
+using WatchPilot.Data;
 using WatchPilot.Logic;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddScoped<IUserDAO, UserDAO>();
 builder.Services.AddScoped<IUserLogic, UserLogic>();
 
 var app = builder.Build();

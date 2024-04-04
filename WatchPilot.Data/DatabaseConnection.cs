@@ -10,7 +10,7 @@ namespace WatchPilot.Data
 
         public T ExecuteQuery<T>(string Query, Func<SqlDataReader, T> mapFunction)
         {
-            T result = default(T); // Initialize the result with the default value of the specified type
+            T result = default(T); 
 
             using (SqlConnection cnn = new SqlConnection(connectionString))
             {
@@ -25,7 +25,6 @@ namespace WatchPilot.Data
                             {
                                 if (dataReader.Read())
                                 {
-                                    // Map the data from the dataReader to the specified type
                                     T obj = mapFunction(dataReader);
                                     result = (obj);
                                     

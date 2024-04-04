@@ -9,8 +9,12 @@ namespace WatchPilot.Logic
 {
     public class UserLogic : IUserLogic
     {
-
-        UserDAO userDAO = new UserDAO();
+        private readonly IUserDAO userDAO;
+        
+        public UserLogic(IUserDAO userDAO)
+        {
+            this.userDAO = userDAO;
+        }
 
         private User UserDTOToUser(UserDTO userDTO)
         {

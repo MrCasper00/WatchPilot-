@@ -7,8 +7,15 @@ using System.Threading.Tasks;
 
 namespace WatchPilot.Data
 {
-    public class UserDAO
+    public class UserDAO : IUserDAO
     {
+        private DatabaseConnection databaseConnection;
+
+        public UserDAO()
+        {
+            databaseConnection = new DatabaseConnection();
+        }
+
         public void Add(string username, string password)
         {
             
@@ -27,7 +34,6 @@ namespace WatchPilot.Data
 
         public UserDTO Get(int id)
         {
-            DatabaseConnection databaseConnection = new DatabaseConnection();
             User user = databaseConnection.ExecuteQuery(
                 $"SELECT * FROM dbo.[user] WHERE UserID = '{id}'",
                 reader => new User
@@ -38,7 +44,6 @@ namespace WatchPilot.Data
                 }
                 );
 
-            
             return ToDTO(user);
         }
 
