@@ -3,22 +3,23 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WatchPilot.Data.Entities;
+using WatchPilot.Logic;
 
-
-namespace WatchPilot.Data
+namespace WatchPilot.Data.DataAccessObjects
 {
     public class UserDAO : IUserDAO
     {
-        private DatabaseConnection databaseConnection;
+        private readonly DatabaseConnection databaseConnection;
 
-        public UserDAO()
+        public UserDAO(DatabaseConnection db)
         {
-            databaseConnection = new DatabaseConnection();
+            databaseConnection = db;
         }
 
         public void Add(string username, string password)
         {
-            
+
 
         }
 
@@ -44,12 +45,14 @@ namespace WatchPilot.Data
                 }
                 );
 
+
+
             return ToDTO(user);
         }
 
         private UserDTO ToDTO(User user)
         {
-            return new UserDTO
+            return user == null ? null : new UserDTO
             {
                 UserID = user.userID,
                 Username = user.username

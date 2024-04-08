@@ -8,6 +8,6 @@ namespace WatchPilot.Logic
 {
     public interface IUserLogic
     {
-        User ObtainUser(int id);
+        UserDTO ObtainUser(int id);
     }
 }

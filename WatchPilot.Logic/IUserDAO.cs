@@ -4,11 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WatchPilot.Data
+namespace WatchPilot.Logic
 {
     public interface IUserDAO
     {
         UserDTO Get(int id);
-
     }
 }

@@ -6,8 +6,4 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\WatchPilot.Data\WatchPilot.Data.csproj" />
-  </ItemGroup>
-
 </Project>

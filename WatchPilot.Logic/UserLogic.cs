@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using WatchPilot.Data;
+using WatchPilot.Logic.Exceptions;
+
 
 namespace WatchPilot.Logic
 {
@@ -16,24 +17,18 @@ namespace WatchPilot.Logic
             this.userDAO = userDAO;
         }
 
-        private User UserDTOToUser(UserDTO userDTO)
-        {
-            User user = new User
-            {
-                UserID = userDTO.UserID,
-                Username = userDTO.Username
-            };
 
-            return user;
-        }
-
-
-
-        public User ObtainUser(int id)
+        public UserDTO ObtainUser(int id)
         {
             
             UserDTO userDTO = userDAO.Get(id);
-            return UserDTOToUser(userDTO);
+
+            if (userDTO == null)
+            {
+                throw new UserNotFoundException();
+            }
+
+            return userDTO;
             
         }
 

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WatchPilot.Logic;
+using WatchPilot.Logic.Exceptions;
 using WatchPilot.Models;
 
 namespace WatchPilot.Controllers
@@ -18,14 +19,25 @@ namespace WatchPilot.Controllers
         [HttpPost]
         public IActionResult ObtainUserInfo(int userId)
         {
-            User user = _UserLogic.ObtainUser(userId);
-            UserViewModel ViewModel = new UserViewModel
+            try
             {
-                UserID = user.UserID,
-                Username = user.Username
-            };
+                UserDTO user = _UserLogic.ObtainUser(userId);
+                UserViewModel ViewModel = new UserViewModel
+                {
+                    UserID = user.UserID,
+                    Username = user.Username
+                };
 
-            return View("~/Views/Home/Index.cshtml", ViewModel);
+                return View("~/Views/Home/Index.cshtml", ViewModel);
+            }
+            catch (UserNotFoundException ex)
+            {
+                return View("~/Views/Home/Index.cshtml", new UserViewModel 
+                {  
+                    UserID = -1,
+                    Username = "User not found"
+                });
+            }
         }
     }
 }

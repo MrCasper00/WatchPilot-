@@ -1,12 +1,18 @@
 ﻿using System.Data.SqlTypes;
 using System.Reflection.PortableExecutable;
 using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Configuration;
 
 namespace WatchPilot.Data
 {
     public class DatabaseConnection
     {
-        private string connectionString = "Server=mssqlstud.fhict.local;Database=dbi532263;User Id=dbi532263;Password=BrownGreen78!;Max Pool Size=200;TrustServerCertificate=true";
+        private string connectionString = "";
+        public DatabaseConnection(IConfiguration config)
+        {
+            connectionString = config.GetConnectionString("DefaultConnection");
+        }
+
 
         public T ExecuteQuery<T>(string Query, Func<SqlDataReader, T> mapFunction)
         {

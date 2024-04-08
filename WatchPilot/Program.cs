@@ -1,4 +1,5 @@
 using WatchPilot.Data;
+using WatchPilot.Data.DataAccessObjects;
 using WatchPilot.Logic;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -7,6 +8,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<IUserDAO, UserDAO>();
 builder.Services.AddScoped<IUserLogic, UserLogic>();
+builder.Services.AddScoped(serviceProvider =>
+{
+    var configuration = serviceProvider.GetRequiredService<IConfiguration>();
+    return new DatabaseConnection(configuration);
+});
 
 var app = builder.Build();
 
