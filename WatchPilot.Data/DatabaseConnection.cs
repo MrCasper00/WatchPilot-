@@ -50,10 +50,73 @@ namespace WatchPilot.Data
             return result;
         }
 
+        public List<T> ExecuteQueries<T>(string Query, Func<SqlDataReader, T> mapFunction)
+        {
+            List<T> result = new List<T>();
+
+            using (SqlConnection cnn = new SqlConnection(connectionString))
+            {
+                cnn.Open();
+                using (SqlTransaction transaction = cnn.BeginTransaction())
+                {
+                    try
+                    {
+                        using (SqlCommand command = new SqlCommand(Query, cnn, transaction))
+                        {
+                            using (SqlDataReader dataReader = command.ExecuteReader())
+                            {
+                                while (dataReader.Read())
+                                {
+                                    T obj = mapFunction(dataReader);
+                                    result.Add(obj);
+
+                                }
+                            }
+                        }
+                        transaction.Commit();
+                    }
+                    catch (Exception ex)
+                    {
+                        transaction.Rollback();
+                        Console.WriteLine("Transaction rolled back. Error: " + ex.Message);
+                    }
+                }
+            }
+
+            return result;
+        }
 
 
 
+        public int ExecuteNonQuery(string Query, SqlParameter[] parameters)
+        {
+            using (SqlConnection cnn = new SqlConnection(connectionString))
+            {
+                cnn.Open();
+                using (SqlTransaction transaction = cnn.BeginTransaction())
+                {
+                    int rows = 0;
+                    try
+                    {
+                        using (SqlCommand command = new SqlCommand(Query, cnn, transaction))
+                        {
+                            command.Parameters.AddRange(parameters);
+                            rows = command.ExecuteNonQuery();
+                        }
+                        transaction.Commit();
+                        return rows;
+                    }
+                    catch (Exception ex)
+                    {
+                        transaction.Rollback();
+                        Console.WriteLine("Transaction rolled back. Error: " + ex.Message);
+                        return rows;
+                    }
+                }
+            }
+        }
 
+        
 
 
 

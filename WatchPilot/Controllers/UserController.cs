@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using WatchPilot.Logic;
+using WatchPilot.Logic.DataTransferObjects;
 using WatchPilot.Logic.Exceptions;
+using WatchPilot.Logic.Interfaces;
 using WatchPilot.Models;
 
 namespace WatchPilot.Controllers
@@ -22,11 +23,9 @@ namespace WatchPilot.Controllers
             try
             {
                 UserDTO user = _UserLogic.ObtainUser(userId);
-                UserViewModel ViewModel = new UserViewModel
-                {
-                    UserID = user.UserID,
-                    Username = user.Username
-                };
+                UserViewModel ViewModel = new UserViewModel().FromDTO(user);
+
+
 
                 return View("~/Views/Home/Index.cshtml", ViewModel);
             }

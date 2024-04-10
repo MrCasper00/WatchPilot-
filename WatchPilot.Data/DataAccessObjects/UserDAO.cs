@@ -4,7 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WatchPilot.Data.Entities;
-using WatchPilot.Logic;
+using WatchPilot.Logic.DataTransferObjects;
+using WatchPilot.Logic.Interfaces;
 
 namespace WatchPilot.Data.DataAccessObjects
 {

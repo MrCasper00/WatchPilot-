@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
-using WatchPilot.Logic;
+using WatchPilot.Logic.Interfaces;
 using WatchPilot.Models;
 
 namespace WatchPilot.Controllers
@@ -21,15 +21,21 @@ namespace WatchPilot.Controllers
         {
             UserViewModel ViewModel = new UserViewModel();
 
-
-
-
             return View(ViewModel);
         }
 
-        
-
         public IActionResult Privacy()
+        {
+            return View();
+        }
+
+        
+        public IActionResult NewShow()
+        {
+            return View();
+        }
+
+        public IActionResult ShowOverview()
         {
             return View();
         }

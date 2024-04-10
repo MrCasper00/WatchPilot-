@@ -1,5 +1,6 @@
-using WatchPilot.Logic;
 using WatchPilot.Logic.Exceptions;
+using WatchPilot.Logic.Interfaces;
+using WatchPilot.Logic.Logic;
 
 namespace WatchPilot.Test
 {

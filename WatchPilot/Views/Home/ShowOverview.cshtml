@@ -1,0 +1,23 @@
+﻿@model List<ShowViewModel>
+
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    ViewData["Title"] = "Showoverview";
+}
+<h1>@ViewData["Title"]</h1>
+
+<div class="row">
+
+@foreach (var show in Model)
+{
+        <div class="col-md-4">
+            <div class="show-tile">
+                <h3 class="show-title">@show.Title</h3>
+                <img src="@show.Picture" alt="@show.Title" class="img-fluid">
+                <p>Episodes: @show.TotalEpisodes</p>
+            </div>
+        </div>
+}
+</div>

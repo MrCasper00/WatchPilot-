@@ -1,6 +1,11 @@
+using Microsoft.Extensions.FileProviders;
+using WatchPilot.Controllers;
 using WatchPilot.Data;
 using WatchPilot.Data.DataAccessObjects;
-using WatchPilot.Logic;
+using WatchPilot.Logic.DataTransferObjects;
+using WatchPilot.Logic.Interfaces;
+using WatchPilot.Logic.Logic;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +13,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<IUserDAO, UserDAO>();
 builder.Services.AddScoped<IUserLogic, UserLogic>();
+builder.Services.AddScoped<IShowDAO, ShowDAO>();
+builder.Services.AddScoped<IImageLogic, ImageLogic>();
+builder.Services.AddScoped<IShowLogic, ShowLogic>();
 builder.Services.AddScoped(serviceProvider =>
 {
     var configuration = serviceProvider.GetRequiredService<IConfiguration>();
@@ -15,6 +23,7 @@ builder.Services.AddScoped(serviceProvider =>
 });
 
 var app = builder.Build();
+
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -24,8 +33,13 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-
-
+app.UseStaticFiles();
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(
+            Path.Combine(Directory.GetCurrentDirectory(), "images")),
+    RequestPath = "/images"
+}); // This is so i can use a Dir thats not in wwwroot. I just think the file structure is cleaner this way.
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();

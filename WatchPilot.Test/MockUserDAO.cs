@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using WatchPilot.Logic;
+using WatchPilot.Logic.DataTransferObjects;
+using WatchPilot.Logic.Interfaces;
 
 namespace WatchPilot.Test
 {

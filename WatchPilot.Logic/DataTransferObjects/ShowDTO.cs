@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WatchPilot.Data.Entities
+namespace WatchPilot.Logic.DataTransferObjects
 {
-    public class Show
+    public class ShowDTO
     {
         public int? ShowID { get; set; }
         public string? Title { get; set; }
@@ -16,6 +16,5 @@ namespace WatchPilot.Data.Entities
         public DateTime? LastEdited { get; set; }
         public string? Picture { get; set; }
         public int? ShowOverViewID { get; set; }
-
     }
 }
