@@ -29,10 +29,16 @@ namespace WatchPilot.Controllers
             return View();
         }
 
-        
-        public IActionResult NewShow()
+        public IActionResult CreateShowOverview()
         {
-            return View();
+            return PartialView("~/Views/Home/_CreateShowOverview.cshtml");
+        }
+        
+        public IActionResult NewShow(int showOverviewID)
+        {
+            ShowViewModel viewModel = new ShowViewModel();
+            viewModel.ShowOverViewID = showOverviewID;
+            return PartialView("~/Views/Home/_NewShow.cshtml", viewModel);
         }
 
         public IActionResult ShowOverview()

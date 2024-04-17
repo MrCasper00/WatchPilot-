@@ -16,6 +16,8 @@ builder.Services.AddScoped<IUserLogic, UserLogic>();
 builder.Services.AddScoped<IShowDAO, ShowDAO>();
 builder.Services.AddScoped<IImageLogic, ImageLogic>();
 builder.Services.AddScoped<IShowLogic, ShowLogic>();
+builder.Services.AddScoped<IShowOverviewDAO, ShowOverviewDAO>();
+builder.Services.AddScoped<IShowOverviewLogic, ShowOverviewLogic>();
 builder.Services.AddScoped(serviceProvider =>
 {
     var configuration = serviceProvider.GetRequiredService<IConfiguration>();

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using WatchPilot.Data.Entities;
 using WatchPilot.Logic.DataTransferObjects;
 using WatchPilot.Logic.Interfaces;
 using WatchPilot.Logic.Logic;
@@ -24,7 +25,7 @@ namespace WatchPilot.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> NewShow(IFormFile picture, int totalEpisodes, string title, string description)
+        public async Task<IActionResult> NewShow(IFormFile picture, int totalEpisodes, string title, string description, int showOverviewID)
         {
             ShowViewModel NewShow = new ShowViewModel
             {
@@ -33,7 +34,7 @@ namespace WatchPilot.Controllers
                 TotalEpisodes = totalEpisodes,
                 CurrentEpisode = 0,
                 LastEdited = DateTime.UtcNow,
-                ShowOverViewID = 1
+                ShowOverViewID = showOverviewID
             };
 
             //Dit later verplaatsen naar anderen plek
@@ -61,7 +62,7 @@ namespace WatchPilot.Controllers
         }
 
 
-        [HttpGet]
+        [HttpPost]
         public IActionResult GetAllInOverview(int showOverviewID)
         {
             List<ShowDTO> showsDTO = _ShowLogic.GetAll(showOverviewID);
@@ -71,7 +72,8 @@ namespace WatchPilot.Controllers
                 showsViewModel.Add(new ShowViewModel().FromDTO(show));
             }
 
-            return View("~/Views/Home/ShowOverview.cshtml", showsViewModel);
+
+            return PartialView("~/Views/Home/_Shows.cshtml", showsViewModel);
         }
 
 

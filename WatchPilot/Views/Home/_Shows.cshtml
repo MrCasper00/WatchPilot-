@@ -1,0 +1,15 @@
+﻿@if (Model != null)
+{
+    <div class="row">
+        @foreach (var show in Model)
+        {
+            <div class="col-md-4">
+                <div class="show-tile">
+                    <h3 class="show-title">@show.Title</h3>
+                    <img src="@show.Picture" alt="@show.Title" class="img-fluid">
+                    <p>Episodes: @show.TotalEpisodes</p>
+                </div>
+            </div>
+        }
+    </div>
+}

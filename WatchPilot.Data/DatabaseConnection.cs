@@ -1,5 +1,6 @@
 ﻿using System.Data.SqlTypes;
 using System.Reflection.PortableExecutable;
+using System.Security.Principal;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 
@@ -101,8 +102,10 @@ namespace WatchPilot.Data
                         using (SqlCommand command = new SqlCommand(Query, cnn, transaction))
                         {
                             command.Parameters.AddRange(parameters);
-                            rows = command.ExecuteNonQuery();
+                            rows =command.ExecuteNonQuery();
                         }
+
+                        
                         transaction.Commit();
                         return rows;
                     }
@@ -112,11 +115,53 @@ namespace WatchPilot.Data
                         Console.WriteLine("Transaction rolled back. Error: " + ex.Message);
                         return rows;
                     }
+
+                    
                 }
             }
         }
 
-        
+
+
+        public int ExecuteScalar(string Query, SqlParameter[] parameters)
+        {
+            using (SqlConnection cnn = new SqlConnection(connectionString))
+            {
+                cnn.Open();
+                using (SqlTransaction transaction = cnn.BeginTransaction())
+                {
+                    int identity = 0;
+                    try
+                    {
+                        using (SqlCommand command = new SqlCommand(Query, cnn, transaction))
+                        {
+                            command.Parameters.AddRange(parameters);
+                            object result = command.ExecuteScalar();
+                            if (result != DBNull.Value)
+                            {
+                                identity = Convert.ToInt32(result);
+                            }
+                        }
+
+
+                        transaction.Commit();
+                        
+                    }
+                    catch (Exception ex)
+                    {
+                        transaction.Rollback();
+                        Console.WriteLine("Transaction rolled back. Error: " + ex.Message);
+                        
+                    }
+
+                    return identity;
+                }
+            }
+        }
+
+
+
+
 
 
 

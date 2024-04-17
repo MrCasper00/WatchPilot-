@@ -1,4 +1,4 @@
-﻿@model List<ShowViewModel>
+﻿@model ShowDashboardViewModel
 
 @*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -9,15 +9,80 @@
 <h1>@ViewData["Title"]</h1>
 
 <div class="row">
+    @{
 
-@foreach (var show in Model)
-{
-        <div class="col-md-4">
-            <div class="show-tile">
-                <h3 class="show-title">@show.Title</h3>
-                <img src="@show.Picture" alt="@show.Title" class="img-fluid">
-                <p>Episodes: @show.TotalEpisodes</p>
-            </div>
-        </div>
+        if (Model.ShowOverviews.Count != 0)
+        {
+                
+                <div class="d-flex align-items-center flex-column">
+                    <div style="width: 30rem">
+                        <div class="mb-3">
+                            <label class="form-label" for="overviewName">Overview:</label>
+                            <select class="form-control" id="overviewDropDown" name="selectedOverviewID" style="width: auto; display: inline-block;">
+                                @foreach (var overview in Model.ShowOverviews)
+                                {
+                                        <option value="@overview.ShowOverviewID">@overview.OverviewName</option>
+                                }
+                            </select>
+                        <button id="loadPartialCreateShowOverview" data-bs-toggle="modal" data-bs-target="#exampleModal">+</button>
+                        <input type="hidden" id="hiddenShowOverviewID" name="showOverviewID" value="@Model.ShowOverviews[0].ShowOverviewID" />
+                        <button type="button" id="addNewShowButton" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newShowModal">Add New Show</button>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div id="onClickPartialCreateShowOverview"></div>
+
+      
+        }else
+        {
+            <div id="partialCreateShowOverview"></div>
+        }
+
+        <div id="partialNewShow"></div>
+
+        
+        <div id="partialShows"></div>
+         
+
 }
-</div>
+@section Scripts {
+    <script>
+        try {
+            document.getElementById('overviewDropDown').addEventListener('change', function () {
+                document.getElementById('hiddenShowOverviewID').value = this.value;
+                $('#partialShows').load("/Show/GetAllInOverview", { showOverviewID: $('#hiddenShowOverviewID').val() });
+            });
+        } catch (error) {
+            console.error(error);
+        }
+        
+
+        $('#partialShows').load("/Show/GetAllInOverview", { showOverviewID: $('#hiddenShowOverviewID').val() });
+
+    
+        try {
+            $('#partialCreateShowOverview').load("/Home/CreateShowOverview");
+        } catch (error) {
+            console.error(error);
+        }
+        
+
+        
+        try {
+            $('#onClickPartialCreateShowOverview').load('/Home/CreateShowOverview');
+        } catch {
+            console.error(error);
+        }
+        
+        try {
+                
+            $('#partialNewShow').load("/Home/NewShow", { showOverviewID: $('#hiddenShowOverviewID').val() }, function () {  
+            });
+                
+        } catch (error) {
+            console.error(error);
+        }
+    </script>
+}

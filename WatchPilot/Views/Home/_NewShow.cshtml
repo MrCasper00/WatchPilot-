@@ -1,0 +1,44 @@
+﻿@model ShowViewModel
+<div class="modal fade" id="newShowModal" tabindex="1" aria-labelledby="newShowModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="newShowModalLabel">New Show</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="NewShowForm" method="post" asp-controller="Show" asp-action="NewShow" enctype="multipart/form-data">
+            <div class="modal-body">
+
+                    <div class="mb-3">
+                        <label for="picture" class="form-label">Picture:</label>
+                        <input type="file" class="custom-file-input" id="picture" name="picture" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label" for="totalEpisodes">Total Episodes</label>
+                        <input type="number" id="total-episodes" class="form-control" name="totalEpisodes" required />
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="title" class="form-label">Title:</label>
+                        <input type="text" class="form-control" id="title" name="title" required maxlength="50" />
+                        <div class="valid-feedback">Good!</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description</label>
+                        <textarea class="form-control" id="description" rows="3" name="description" required></textarea>
+                        <div class="valid-feedback">Good!</div>
+                    </div>
+
+                    <input type="hidden" name="showOverviewID" value="@Model.ShowOverViewID" />
+                
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Add</button>
+            </div>
+            </form>
+        </div>
+        </div>
+    </div>
+</div>
