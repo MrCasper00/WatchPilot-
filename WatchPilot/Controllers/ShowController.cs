@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using WatchPilot.Data.Entities;
 using WatchPilot.Logic.DataTransferObjects;
 using WatchPilot.Logic.Interfaces;
@@ -11,13 +12,13 @@ namespace WatchPilot.Controllers
     {
         private readonly IImageLogic _ImageLogic;
         private readonly IShowLogic _ShowLogic;
-
+        
         public ShowController(IImageLogic imageLogic, IShowLogic showLogic)
         {
             _ImageLogic = imageLogic;
             _ShowLogic = showLogic;
         }
-
+        [Authorize]
         public IActionResult Index()
         {
             return View();
@@ -25,6 +26,7 @@ namespace WatchPilot.Controllers
 
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> NewShow(IFormFile picture, int totalEpisodes, string title, string description, int showOverviewID)
         {
             ShowViewModel NewShow = new ShowViewModel
@@ -58,11 +60,12 @@ namespace WatchPilot.Controllers
             _ShowLogic.AddShow(showDTO);
 
 
-            return View("~/Views/Home/privacy.cshtml");
+            return RedirectToAction("GetShowOverviews", "ShowOverview");
         }
 
 
         [HttpPost]
+        [Authorize]
         public IActionResult GetAllInOverview(int showOverviewID)
         {
             List<ShowDTO> showsDTO = _ShowLogic.GetAll(showOverviewID);

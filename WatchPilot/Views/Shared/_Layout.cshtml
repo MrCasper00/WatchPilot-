@@ -26,8 +26,26 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="ShowOverview" asp-action="GetShowOverviews" asp-route-userId="1" >Show Overview</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="ShowOverview" asp-action="GetShowOverviews">Show Overview</a>
                         </li>
+                    </ul>
+                    <ul class="navbar-nav">
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                                <li class="nav-item">
+                                            <a class="nav-link text-dark" >Current user: @User.Identity.Name</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Logout" >Logout</a>
+                                </li>
+                        }
+                        else
+                        {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Login" >Login</a>
+                                </li>
+                        }
+                    
                     </ul>
                 </div>
             </div>

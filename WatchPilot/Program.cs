@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Extensions.FileProviders;
 using WatchPilot.Controllers;
 using WatchPilot.Data;
@@ -23,6 +24,13 @@ builder.Services.AddScoped(serviceProvider =>
     var configuration = serviceProvider.GetRequiredService<IConfiguration>();
     return new DatabaseConnection(configuration);
 });
+
+
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Home/Login";
+    });
 
 var app = builder.Build();
 

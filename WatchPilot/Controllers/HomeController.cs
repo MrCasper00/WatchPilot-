@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using WatchPilot.Logic.Interfaces;
@@ -17,6 +18,7 @@ namespace WatchPilot.Controllers
             _UserLogic = userLogic;
         }
 
+        [Authorize]
         public IActionResult Index()
         {
             UserViewModel ViewModel = new UserViewModel();
@@ -24,16 +26,29 @@ namespace WatchPilot.Controllers
             return View(ViewModel);
         }
 
+        public IActionResult Register()
+        {
+            return View();
+        }
+
+        public IActionResult Login()
+        {
+            return View();
+        }
+
+        [Authorize]
         public IActionResult Privacy()
         {
             return View();
         }
 
+        [Authorize]
         public IActionResult CreateShowOverview()
         {
             return PartialView("~/Views/Home/_CreateShowOverview.cshtml");
         }
-        
+
+        [Authorize]
         public IActionResult NewShow(int showOverviewID)
         {
             ShowViewModel viewModel = new ShowViewModel();
@@ -41,6 +56,7 @@ namespace WatchPilot.Controllers
             return PartialView("~/Views/Home/_NewShow.cshtml", viewModel);
         }
 
+        [Authorize]
         public IActionResult ShowOverview()
         {
             return View();

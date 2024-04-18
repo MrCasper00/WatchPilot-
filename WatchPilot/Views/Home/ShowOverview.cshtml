@@ -24,8 +24,8 @@
                                         <option value="@overview.ShowOverviewID">@overview.OverviewName</option>
                                 }
                             </select>
+                                <input type="hidden" id="hiddenShowOverviewID" name="showOverviewID" value="@Model.ShowOverviews[0].ShowOverviewID" />
                         <button id="loadPartialCreateShowOverview" data-bs-toggle="modal" data-bs-target="#exampleModal">+</button>
-                        <input type="hidden" id="hiddenShowOverviewID" name="showOverviewID" value="@Model.ShowOverviews[0].ShowOverviewID" />
                         <button type="button" id="addNewShowButton" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newShowModal">Add New Show</button>
                         </div>
                     </div>
@@ -37,7 +37,15 @@
       
         }else
         {
+            <div class="d-flex align-items-center flex-column">
+                    <div style="width: 30rem">
+                        <div class="mb-3">
+            <h1>No Overviews Found:</h1>
+            <button id="loadPartialCreateShowOverview" data-bs-toggle="modal" data-bs-target="#exampleModal">Create Overview</button>
             <div id="partialCreateShowOverview"></div>
+            </div>
+            </div>
+            </div>
         }
 
         <div id="partialNewShow"></div>
@@ -57,6 +65,14 @@
         } catch (error) {
             console.error(error);
         }
+
+            try {
+                document.getElementById('overviewDropDown').addEventListener('change', function () {
+                    document.getElementById('showOverviewID').value = this.value;
+                });
+            } catch (error) {
+                console.error(error);
+            }
         
 
         $('#partialShows').load("/Show/GetAllInOverview", { showOverviewID: $('#hiddenShowOverviewID').val() });

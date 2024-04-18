@@ -26,5 +26,16 @@ namespace WatchPilot.Test
             }
             
         }
+
+        public UserDTO Get(string username)
+        {
+            
+                return new UserDTO
+                {
+                    UserID = 1,
+                    Username = "TestUser"
+                };
+            
+        }
     }
 }

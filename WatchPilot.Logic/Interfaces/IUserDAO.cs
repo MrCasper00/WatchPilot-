@@ -10,5 +10,8 @@ namespace WatchPilot.Logic.Interfaces
     public interface IUserDAO
     {
         UserDTO Get(int id);
+        UserDTO Get(string username);
+
+        UserDTO Add(string username, string password);
     }
 }

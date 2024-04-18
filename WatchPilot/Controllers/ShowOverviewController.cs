@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using WatchPilot.Logic.DataTransferObjects;
 using WatchPilot.Logic.Interfaces;
 using WatchPilot.Models;
@@ -21,10 +23,11 @@ namespace WatchPilot.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public IActionResult CreateShowOverview(string overviewName)
         {
-            //UserID word later opgehaald met authoriazation claims. Vandaar dat deze nu gehardcode is.
-            int userId = 1;
+            string userIdstring = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            int userId = int.Parse(userIdstring);
 
 
             _showOverviewLogic.Add(userId, overviewName);
@@ -35,8 +38,11 @@ namespace WatchPilot.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetShowOverviews(int userId)
+        [Authorize]
+        public IActionResult GetShowOverviews()
         {
+            string userIdstring = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            int userId = int.Parse(userIdstring);
             List<ShowOverviewDTO> showOverviews = _showOverviewLogic.GetAllOfUser(userId);
 
             List<ShowOverviewViewModel> showOverviewModel = new List<ShowOverviewViewModel>();
