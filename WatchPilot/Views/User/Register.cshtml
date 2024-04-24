@@ -1,4 +1,5 @@
-﻿<form method="post" asp-controller="User" asp-action="Register">
+﻿@model RegisterViewModel
+<form method="post" asp-controller="User" asp-action="Register">
 <section class="vh-100 gradient-custom">
   <div class="container py-5 h-100">
     <div class="row d-flex justify-content-center align-items-center h-100">
@@ -9,22 +10,26 @@
             <div class="mb-md-5 mt-md-4 pb-5">
 
               <h2 class="fw-bold mb-2 text-uppercase">Register</h2>
+              <span asp-validation-for="RegisterError" class="text-danger"></span>
               <p class="text-white-50 mb-5">Please enter an username and password!</p>
 
               <div data-mdb-input-init class="form-outline form-white mb-4">
-                <input class="form-control form-control-lg" name="username" placeholder="Username"/>
+                <input class="form-control form-control-lg" name="username" placeholder="Username" value="@Model.Username"/>
+                <span asp-validation-for="Username" class="text-danger"></span>
               </div>
 
               <div data-mdb-input-init class="form-outline form-white mb-4">
-                <input type="password" id="typePasswordX" name="password" class="form-control form-control-lg" placeholder="Password" />
+                <input type="password" id="typePasswordX" name="password" class="form-control form-control-lg" placeholder="Password" value="@Model.Password"/>
+                <span asp-validation-for="Password" class="text-danger"></span>
               </div>
 
               <button data-mdb-button-init data-mdb-ripple-init class="btn btn-outline-light btn-lg px-5" type="submit">Register</button>
+              
               <div>
-              <p class="mb-0">Do have an account? <a asp-controller="Home" asp-action="Login" class="text-white-50 fw-bold">Login</a>
+              <p class="mb-0">Do have an account? <a asp-controller="User" asp-action="Login" class="text-white-50 fw-bold">Login</a>
               </p>
             </div>
-            </div
+            </div>
           </div>
         </div>
       </div>

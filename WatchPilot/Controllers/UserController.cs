@@ -20,22 +20,46 @@ namespace WatchPilot.Controllers
             _UserLogic = userLogic;
         }
 
-        [HttpPost]
-        public IActionResult Register(string username, string password)
+        public IActionResult Login()
         {
+            return View();
+        }
 
+        public IActionResult Register()
+        {
+            RegisterViewModel view = new RegisterViewModel();
+            return View(view);
+        }
+
+        [HttpPost]
+        public IActionResult Register(RegisterViewModel register)
+        {
             try
             {
-                UserDTO user = _UserLogic.CreateUser(username, password);
-            } catch (Exception ex)
+                UserDTO user = _UserLogic.CreateUser(register.Username, register.Password);
+
+            } catch (UserAlreadyExistsException ex)
             {
-                return RedirectToAction("Register", "Home");
+                ModelState.AddModelError(nameof(register.Username), ex.Message);
+                return View(register);
+            } 
+            catch (UsernameException ex)
+            {
+                ModelState.AddModelError(nameof(register.Username), ex.Message);
+                return View(register);
+            }
+            catch (PasswordException ex)
+            {
+                ModelState.AddModelError(nameof(register.Password), ex.Message);
+                return View(register);
+            }
+            catch (UnkownErrorException ex)
+            {
+                ModelState.AddModelError("RegisterError", ex.Message);
+                return View(register);
             }
             
-
-            
-
-            return RedirectToAction("Login", "Home");
+            return RedirectToAction("Login", "User");
         }
 
 
@@ -56,9 +80,10 @@ namespace WatchPilot.Controllers
                 var principal = new ClaimsPrincipal(identity);
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
 
-            } catch (Exception ex)
+            } catch (UserInfoNoMatchException ex)
             {
-                
+                ModelState.AddModelError("LoginError", "Username or password is incorrect");
+                return View();
             }
 
 

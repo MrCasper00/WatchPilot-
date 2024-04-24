@@ -8,6 +8,7 @@ using WatchPilot.Logic.DataTransferObjects;
 using WatchPilot.Logic.Exceptions;
 using WatchPilot.Logic.Interfaces;
 using BCrypt.Net;
+using System.Net.Http.Headers;
 
 namespace WatchPilot.Logic.Logic
 {
@@ -18,39 +19,70 @@ namespace WatchPilot.Logic.Logic
         private int maxUsernameLength = 50;
         private int minUsernameLength = 1;
         private int minValidId = 1;
+        private int maxPasswordLength = 50;
+        private int minPasswordLength = 1;
         public UserLogic(IUserDAO userDAO)
         {
             this.userDAO = userDAO;
         }
 
-        
-
-        public UserDTO CreateUser(string username, string password)
+        public void ValidateUser(string username, string password)
         {
-            //Validatie
-            if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
+            if (string.IsNullOrEmpty(username))
             {
-                throw new ArgumentException("username or password cannot be null or empty");
+                throw new UsernameException("username cannot be empty");
             }
             if (username.Length > maxUsernameLength || username.Length < minUsernameLength)
             {
-                throw new ArgumentException("username cannot be longer than 50 characters or shorter than 1");
+                throw new UsernameException("username cannot be longer than 50 characters or shorter than 1");
             }
-            //Einde validatie
-
-            string hashedPassword = BCrypt.Net.BCrypt.HashPassword(password, workFactor: 15);
-            UserDTO newUser = userDAO.Add(username, hashedPassword);
-
-       
-            if (newUser == null)
+            if (string.IsNullOrEmpty(password))
             {
-                throw new UserAlreadyExistsOrPasswordInvalidException();
+                throw new PasswordException("password cannot be empty");
+            }
+            if (password.Length > maxPasswordLength || password.Length < minPasswordLength)
+            {
+                throw new PasswordException("password cannot be longer than 50 characters or shorter than 1");
+            }
+
+        }
+
+
+        public UserDTO CreateUser(string username, string password)
+        {
+            
+            ValidateUser(username, password);
+            
+            string hashedPassword = BCrypt.Net.BCrypt.HashPassword(password, workFactor: 15);
+
+            try
+            {
+                if (userDAO.Get(username) == null)
+                {
+                    try
+                    {
+                        UserDTO newUser = userDAO.Add(username, hashedPassword);
+                        Console.WriteLine("User Succesfully created");
+                        return newUser;
+                    }
+                    catch (Exception e)
+                    {
+                        throw new UnkownErrorException();
+                    }
+                    
+                } else
+                {
+                    throw new UserAlreadyExistsException();
+                }
+            } catch (Exception e)
+            {
+                if (e is UserAlreadyExistsException)
+                {
+                    throw new UserAlreadyExistsException();
+                }
+                throw new UnkownErrorException();
             }
             
-
-            
-            
-            return newUser;
         }
 
 

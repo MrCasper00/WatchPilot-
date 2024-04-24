@@ -151,7 +151,7 @@ namespace WatchPilot.Data
                     {
                         transaction.Rollback();
                         Console.WriteLine("Transaction rolled back. Error: " + ex.Message);
-                        
+                        throw new Exception("Error in ExecuteScalar");
                     }
 
                     return identity;

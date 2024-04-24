@@ -29,7 +29,7 @@ builder.Services.AddScoped(serviceProvider =>
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
-        options.LoginPath = "/Home/Login";
+        options.LoginPath = "/User/Login";
     });
 
 var app = builder.Build();
