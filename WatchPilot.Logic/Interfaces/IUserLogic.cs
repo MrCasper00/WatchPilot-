@@ -13,5 +13,7 @@ namespace WatchPilot.Logic.Interfaces
         UserDTO LoginUser(string username, string password);
 
         UserDTO CreateUser(string username, string password);
+
+
     }
 }

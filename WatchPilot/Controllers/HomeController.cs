@@ -53,6 +53,8 @@ namespace WatchPilot.Controllers
             return PartialView("~/Views/Home/_NewShow.cshtml", viewModel);
         }
 
+        
+
         [Authorize]
         public IActionResult ShowOverview()
         {

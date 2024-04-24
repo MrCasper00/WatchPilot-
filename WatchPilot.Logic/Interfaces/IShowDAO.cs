@@ -12,5 +12,12 @@ namespace WatchPilot.Logic.Interfaces
         int Add(ShowDTO show);
 
         List<ShowDTO> GetAll(int ShowOverviewID);
+
+        ShowDTO Get(int ShowID);
+
+        ShowDTO Get(int ShowID, int ShowOverviewID);
+
+        void Update(ShowDTO showUpdate);
+
     }
 }
