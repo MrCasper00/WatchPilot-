@@ -1,4 +1,4 @@
-﻿
+﻿@model  LoginViewModel
 
 @{
     ViewData["Title"] = "Login";
@@ -16,14 +16,17 @@
             <div class="mb-md-5 mt-md-4 pb-5">
 
               <h2 class="fw-bold mb-2 text-uppercase">Login</h2>
+              <span asp-validation-for="LoginError" class="text-danger"></span>
               <p class="text-white-50 mb-5">Please enter your login and password!</p>
 
               <div data-mdb-input-init class="form-outline form-white mb-4">
-                <input class="form-control form-control-lg" name="username" placeholder="Username"/>
+                <input class="form-control form-control-lg" name="username" placeholder="Username" value="@Model.Username"/>
+                <span asp-validation-for="Username" class="text-danger"></span>
               </div>
 
               <div data-mdb-input-init class="form-outline form-white mb-4">
-                <input type="password" id="typePasswordX" name="password" class="form-control form-control-lg" placeholder="Password" />
+                                    <input type="password" id="typePasswordX" name="password" class="form-control form-control-lg" placeholder="Password" value="@Model.Password" />
+                <span asp-validation-for="Password" class="text-danger"></span>
               </div>
 
               <p class="small mb-5 pb-lg-2"><a class="text-white-50" href="#!">Forgot password?</a></p>
@@ -42,5 +45,5 @@
       </div>
     </div>
   </div>
-</section
+</section>
 </form>

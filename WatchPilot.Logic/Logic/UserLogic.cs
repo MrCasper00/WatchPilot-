@@ -88,31 +88,29 @@ namespace WatchPilot.Logic.Logic
 
         public UserDTO LoginUser(string username, string password)
         {
-            //Validatie
-            if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
-            {
-                throw new ArgumentException("username or password cannot be null or empty");
-            }
-            if (username.Length > maxUsernameLength || username.Length < minUsernameLength)
-            {
-                throw new ArgumentException("username cannot be longer than 50 characters or shorter than 1");
-            }
-            //Einde validatie
+            ValidateUser(username, password);
 
-            UserDTO userDTO = userDAO.Get(username);
-
-            
-            if (userDTO == null)
+            try
             {
-                throw new UserNotFoundException();
+                UserDTO userDTO = userDAO.Get(username);
+                if (userDTO == null)
+                {
+                    throw new UserInfoNoMatchException();
+                }
+                if (!BCrypt.Net.BCrypt.Verify(password, userDTO.Password))
+                {
+                    throw new UserInfoNoMatchException();
+                }
+                return userDTO;
             }
-     
-            if (!BCrypt.Net.BCrypt.Verify(password, userDTO.Password))
+            catch (Exception e)
             {
-                throw new UserInfoNoMatchException();
+                if (e is UserInfoNoMatchException)
+                {
+                    throw new UserInfoNoMatchException();
+                }
+                throw new UnkownErrorException();
             }
-
-            return userDTO;
         }
 
 

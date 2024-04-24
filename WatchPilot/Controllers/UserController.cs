@@ -22,7 +22,8 @@ namespace WatchPilot.Controllers
 
         public IActionResult Login()
         {
-            return View();
+            LoginViewModel view = new LoginViewModel();
+            return View(view);
         }
 
         public IActionResult Register()
@@ -64,11 +65,11 @@ namespace WatchPilot.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> Login(string username, string password)
+        public async Task<IActionResult> Login(LoginViewModel login)
         {   
             try
             {
-                UserDTO user = _UserLogic.LoginUser(username, password);
+                UserDTO user = _UserLogic.LoginUser(login.Username, login.Password);
 
                 var claims = new List<Claim>
                 {
@@ -80,10 +81,23 @@ namespace WatchPilot.Controllers
                 var principal = new ClaimsPrincipal(identity);
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
 
-            } catch (UserInfoNoMatchException ex)
+            } catch (UserInfoNoMatchException)
             {
-                ModelState.AddModelError("LoginError", "Username or password is incorrect");
-                return View();
+                ModelState.AddModelError("LoginError", "Username or password is incorrect or user does not exist");
+                return View(login);
+            } catch (UsernameException ex)
+            {
+                ModelState.AddModelError(nameof(login.Username), ex.Message);
+                return View(login);
+            }
+            catch (PasswordException ex)
+            {
+                ModelState.AddModelError(nameof(login.Password), ex.Message);
+                return View(login);
+            } catch (UnkownErrorException ex)
+            {
+                ModelState.AddModelError("LoginError", ex.Message);
+                return View(login);
             }
 
 
