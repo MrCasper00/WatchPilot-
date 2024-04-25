@@ -38,6 +38,44 @@ namespace WatchPilot.Controllers
 
         [HttpPost]
         [Authorize]
+        public IActionResult DeleteShowLoad(int showID, int showOverviewID)
+        {
+            DeleteShowViewModel viewModel = new DeleteShowViewModel();
+            viewModel.ShowID = showID;
+            viewModel.ShowOverviewID = showOverviewID;
+            return PartialView("_DeleteShow", viewModel);
+        }
+
+
+        public IActionResult DeleteShow(DeleteShowViewModel show)
+        {
+            string userIdstring = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            int userId = int.Parse(userIdstring);
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _ShowLogic.DeleteShow(show.ShowID, show.ShowOverviewID, userId);
+                    return RedirectToAction("GetShowOverviews", "ShowOverview");
+                }
+                catch (UnauthorizedAccessException)
+                {
+                    return RedirectToAction("GetShowOverviews", "ShowOverview");
+                }
+                catch (UnkownErrorException)
+                {
+                    return RedirectToAction("GetShowOverviews", "ShowOverview");
+                }
+            }
+
+
+            return RedirectToAction("GetShowDetails", "Show", new { showID = show.ShowID, showOverviewID = show.ShowOverviewID });
+
+        }
+
+
+        [HttpPost]
+        [Authorize]
         public IActionResult EditShow(EditShowViewModel show)
         {
             string userIdstring = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;

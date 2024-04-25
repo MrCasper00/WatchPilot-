@@ -87,5 +87,31 @@ namespace WatchPilot.Logic.Logic
             }
         }
 
+        public void DeleteShow(int showID, int showOverviewID, int userID)
+        {
+            ShowOverviewDTO overview = _showOverviewDAO.Get(showOverviewID);
+            if (overview.UserID != userID)
+            {
+                throw new UnauthorizedAccessException("User is not authorized to delete this show");
+            }
+
+            try
+            {
+                ShowDTO show = _showDAO.Get(showID, showOverviewID);
+                if (show == null)
+                {
+                    throw new UnkownErrorException();
+                }
+
+                _showDAO.Delete(showID);
+                
+            }
+            catch (Exception e)
+            {
+                throw new UnkownErrorException();
+            }
+
+        }
+
     }
 }

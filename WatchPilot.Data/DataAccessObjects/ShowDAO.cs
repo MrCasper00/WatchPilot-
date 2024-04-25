@@ -69,9 +69,17 @@ namespace WatchPilot.Data.DataAccessObjects
                 WHERE ShowID = @showID", parameters);
         }
 
-        public void Delete(Show show)
+        public void Delete(int showID)
         {
+            SqlParameter[] parameters = new SqlParameter[]
+            {
+                new SqlParameter("@showID", showID)
+            };
+            
 
+            databaseConnection.ExecuteNonQuery(
+                "DELETE FROM dbo.Show WHERE ShowID = @showID",
+                parameters);
         }
 
         public ShowDTO Get(int showID)

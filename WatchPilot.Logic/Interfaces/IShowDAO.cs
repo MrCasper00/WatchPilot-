@@ -19,5 +19,7 @@ namespace WatchPilot.Logic.Interfaces
 
         void Update(ShowDTO showUpdate);
 
+        void Delete(int ShowID);
+
     }
 }

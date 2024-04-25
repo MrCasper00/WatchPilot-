@@ -26,7 +26,7 @@ namespace WatchPilot.Logic.Logic
             this.userDAO = userDAO;
         }
 
-        public void ValidateUser(string username, string password)
+        private void ValidateUser(string username, string password)
         {
             if (string.IsNullOrEmpty(username))
             {
