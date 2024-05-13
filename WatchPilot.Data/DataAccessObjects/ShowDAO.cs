@@ -43,7 +43,7 @@ namespace WatchPilot.Data.DataAccessObjects
                 VALUES (@title, @description, @totalepisodes, @currentepisode, @picture, @showoverviewid, @lastedited)", parameters);
         }
 
-        public void Update(ShowDTO showUpdate)
+        public int Update(ShowDTO showUpdate)
         {
             SqlParameter[] parameters = new SqlParameter[]
             {
@@ -57,7 +57,7 @@ namespace WatchPilot.Data.DataAccessObjects
                 new SqlParameter("@lastedited", showUpdate.LastEdited)
             };
 
-            databaseConnection.ExecuteNonQuery($@"
+            return databaseConnection.ExecuteNonQuery($@"
                 UPDATE dbo.Show
                 SET title = @title,
                     description = @description,
@@ -69,7 +69,7 @@ namespace WatchPilot.Data.DataAccessObjects
                 WHERE ShowID = @showID", parameters);
         }
 
-        public void Delete(int showID)
+        public int Delete(int showID)
         {
             SqlParameter[] parameters = new SqlParameter[]
             {
@@ -77,7 +77,7 @@ namespace WatchPilot.Data.DataAccessObjects
             };
             
 
-            databaseConnection.ExecuteNonQuery(
+            return databaseConnection.ExecuteNonQuery(
                 "DELETE FROM dbo.Show WHERE ShowID = @showID",
                 parameters);
         }

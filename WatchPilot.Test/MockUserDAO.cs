@@ -10,32 +10,38 @@ namespace WatchPilot.Test
 {
     public class MockUserDAO : IUserDAO
     {
+        List<UserDTO> users = new List<UserDTO>();
+
         public UserDTO Get(int id)
         {
-            if (id != 1)
+            foreach (UserDTO user in users)
             {
-                return null;
-            }
-            else
-            {
-                return new UserDTO
+                if (user.UserID == id)
                 {
-                    UserID = 1,
-                    Username = "TestUser"
-                };
+                    return user;
+                }
             }
-            
-        }
 
+            return null;
+        }
         public UserDTO Get(string username)
         {
-            
-                return new UserDTO
+            foreach (UserDTO user in users)
+            {
+                if (user.Username == username)
                 {
-                    UserID = 1,
-                    Username = "TestUser"
-                };
-            
+                    return user;
+                }
+            }
+            return null;
+        }
+
+        public UserDTO Add(string username, string password)
+        {
+           
+            UserDTO user =  new UserDTO { Username = username, Password = password, UserID = 1 };
+            users.Add(user);
+            return user;
         }
     }
 }

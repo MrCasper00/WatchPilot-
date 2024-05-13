@@ -9,9 +9,9 @@ namespace WatchPilot.Logic.Interfaces
 {
     public interface IShowLogic
     {
-        void AddShow(ShowDTO Show);
+        void AddShow(ShowDTO Show, int userID);
 
-        List<ShowDTO> GetAll(int ShowOverviewID);
+        List<ShowDTO> GetAll(int ShowOverviewID, int userID);
 
         ShowDTO GetShowDetails(int showID, int showOverviewID, int userID);
 

@@ -31,7 +31,15 @@ namespace WatchPilot.Controllers
             return View();
         }
 
-        
+        public IActionResult Unauthorized()
+        {
+            return View("~/Views/Home/Unauthorized.cshtml");
+        }
+
+        public IActionResult UnknownError()
+        {
+            return View("~/Views/Home/UnknownError.cshtml");
+        }
 
         [Authorize]
         public IActionResult Privacy()

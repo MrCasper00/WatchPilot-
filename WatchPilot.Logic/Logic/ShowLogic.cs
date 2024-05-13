@@ -19,14 +19,90 @@ namespace WatchPilot.Logic.Logic
             _showOverviewDAO = showOverviewDAO;
         }
 
-        public void AddShow(ShowDTO Show)
+        private void ShowValidation(ShowDTO show)
         {
-            _showDAO.Add(Show);
+            if (show.Title.Length > 50 || show.Title.Length < 1 || show.Title == null)
+            {
+                throw new ShowException("Title must be between 1 and 50 characters");
+            }
+            if (show.TotalEpisodes == null || show.TotalEpisodes <= 0)
+            {
+                throw new ShowException("Total episodes must be greater than 0");
+            }
+            if (show.Description.Length <= 0 || show.Description == null)
+            {
+                throw new ShowException("Description cannot be empty");
+            }
         }
 
-        public List<ShowDTO> GetAll(int showOverviewID)
+
+
+        public void AddShow(ShowDTO show, int userID)
         {
-            return _showDAO.GetAll(showOverviewID);
+            try
+            {
+                ShowOverviewDTO test = _showOverviewDAO.Get((int)show.ShowOverViewID);
+                if (test.UserID != userID)
+                {
+                    throw new UnauthorizedAccessException("User is not authorized to add a show to this overview");
+                }
+            }
+            catch (Exception e)
+            {
+                if (e is UnauthorizedAccessException)
+                {
+                    throw;
+                }
+                throw new UnkownErrorException();
+            }
+            try
+            {
+                ShowValidation(show);
+                _showDAO.Add(show);
+            } catch (Exception e)
+            {
+                if (e is ShowException)
+                {
+                    throw;
+                }
+
+                throw new UnkownErrorException();
+            }
+            
+        }
+
+        public List<ShowDTO> GetAll(int showOverviewID, int userID)
+        {
+            try
+            {
+                ShowOverviewDTO test = _showOverviewDAO.Get(showOverviewID);
+                if (test == null)
+                {
+                    return new List<ShowDTO>();
+                }
+                if (test.UserID != userID)
+                {
+                    throw new UnauthorizedAccessException("User is not authorized to view this show");
+                }
+                
+            }
+            catch (Exception e)
+            {
+                if (e is UnauthorizedAccessException)
+                {
+                    throw;
+                }
+                throw new UnkownErrorException();
+            }
+
+            try
+            {
+                return _showDAO.GetAll(showOverviewID);
+            }
+            catch (Exception e)
+            {
+                throw new UnkownErrorException();
+            }
             
         }
 
@@ -47,9 +123,18 @@ namespace WatchPilot.Logic.Logic
                 {
                     throw new UnkownErrorException();
                 }
+                if (show.ShowOverViewID != showOverviewID)
+                {
+                    throw new UnauthorizedAccessException("User is not authorized to view this show");
+                }
                 return show;
-            } catch (Exception e)
+            }
+            catch (Exception e)
             {
+                if (e is UnauthorizedAccessException)
+                {
+                    throw;
+                }
                 throw new UnkownErrorException();
             }
         }

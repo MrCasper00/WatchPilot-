@@ -60,11 +60,11 @@ namespace WatchPilot.Controllers
                 }
                 catch (UnauthorizedAccessException)
                 {
-                    return RedirectToAction("GetShowOverviews", "ShowOverview");
+                    return RedirectToAction("Unauthorized", "Home");
                 }
                 catch (UnkownErrorException)
                 {
-                    return RedirectToAction("GetShowOverviews", "ShowOverview");
+                    return RedirectToAction("UnknownError", "Home");
                 }
             }
 
@@ -96,10 +96,10 @@ namespace WatchPilot.Controllers
                     _ShowLogic.UpdateShow(showDTO, userId);
                 } catch (UnauthorizedAccessException)
                 {
-                    return RedirectToAction("GetShowOverviews", "ShowOverview");
+                    return RedirectToAction("Unauthorized", "Home");
                 } catch (UnkownErrorException)
                 {
-                    return RedirectToAction("GetShowOverviews", "ShowOverview");
+                    return RedirectToAction("UnknownError", "Home");
                 }
                
             }
@@ -139,9 +139,24 @@ namespace WatchPilot.Controllers
             }
 
             ShowDTO showDTO = NewShow.ToDTO();
-            
 
-            _ShowLogic.AddShow(showDTO);
+            string userIdstring = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            int userId = int.Parse(userIdstring);
+
+            try
+            {
+                _ShowLogic.AddShow(showDTO, userId);
+            } catch (UnauthorizedAccessException)
+            {
+                return RedirectToAction("Unauthorized", "Home");
+            } catch (UnkownErrorException)
+            {
+                return RedirectToAction("UnknownError", "Home");
+            } catch (ShowException e)
+            {
+                return RedirectToAction("GetShowOverviews", "ShowOverview");
+            }
+            
 
 
             return RedirectToAction("GetShowOverviews", "ShowOverview");
@@ -152,15 +167,27 @@ namespace WatchPilot.Controllers
         [Authorize]
         public IActionResult GetAllInOverview(int showOverviewID)
         {
-            List<ShowDTO> showsDTO = _ShowLogic.GetAll(showOverviewID);
-            List<ShowViewModel> showsViewModel = new List<ShowViewModel>();
-            foreach (ShowDTO show in showsDTO)
+            string userIdstring = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            int userId = int.Parse(userIdstring);
+            try
             {
-                showsViewModel.Add(new ShowViewModel().FromDTO(show));
+                List<ShowDTO> showsDTO = _ShowLogic.GetAll(showOverviewID, userId);
+                List<ShowViewModel> showsViewModel = new List<ShowViewModel>();
+                foreach (ShowDTO show in showsDTO)
+                {
+                    showsViewModel.Add(new ShowViewModel().FromDTO(show));
+                }
+
+
+                return PartialView("~/Views/Home/_Shows.cshtml", showsViewModel);
+            } catch (UnauthorizedAccessException)
+            {
+                return RedirectToAction("Unauthorized", "Home");
+            } catch (UnkownErrorException)
+            {
+                return RedirectToAction("UnknownError", "Home");
             }
-
-
-            return PartialView("~/Views/Home/_Shows.cshtml", showsViewModel);
+            
         }
 
         [Authorize]
@@ -179,10 +206,10 @@ namespace WatchPilot.Controllers
             }
             catch (UnauthorizedAccessException)
             {
-                return RedirectToAction("GetShowOverviews", "ShowOverview");
+                return RedirectToAction("Unauthorized", "Home");
             } catch (UnkownErrorException)
             {
-                return RedirectToAction("GetShowOverviews", "ShowOverview");
+                return RedirectToAction("UnknownError", "Home");
             }
             
         }

@@ -11,7 +11,7 @@ namespace WatchPilot.Logic.Interfaces
     {
         ShowOverviewDTO Add(int userID, string overviewName);
 
-        ShowOverviewDTO Get(int showOverviewID);
+        ShowOverviewDTO Get(int showOverviewID, int userID);
 
         List<ShowOverviewDTO> GetAllOfUser(int userId);
         
