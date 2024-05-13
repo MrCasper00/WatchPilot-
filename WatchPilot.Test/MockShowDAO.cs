@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,54 +11,84 @@ namespace WatchPilot.Test
 {
     public class MockShowDAO : IShowDAO
     {
+        List<ShowDTO> shows = new List<ShowDTO>();
+
         public int Add(ShowDTO show)
         {
-            return 1;
+            show.ShowID = shows.Count + 1;
+
+            if (shows.Contains(show))
+            {
+                return 0;
+            } else
+            {
+                shows.Add(show);
+                return 1;
+            }
         }
 
         public List<ShowDTO> GetAll(int ShowOverviewID)
         {
-            if (ShowOverviewID == 1)
+            List<ShowDTO> showz = new List<ShowDTO>();
+            foreach (var show in showz.ToList())
             {
-                return new List<ShowDTO> { new ShowDTO { ShowID = 1, Picture = "Path/Location/image.png", CurrentEpisode = 0, Description = "test", LastEdited = DateTime.UtcNow, ShowOverViewID= 1, Title= "Title", TotalEpisodes= 12 } };
-            } else
-            {
-                return new List<ShowDTO>();
+                if (show.ShowOverViewID == ShowOverviewID)
+                {
+                    showz.Add(show);
+                }
             }
+            return showz;
         }
 
         public ShowDTO Get(int ShowID)
         {
-            if (ShowID == 1)
+            foreach (var show in shows.ToList())
             {
-                return new ShowDTO { ShowID = ShowID, Picture = "Path/Location/image.png", CurrentEpisode = 0, Description = "test", LastEdited = DateTime.UtcNow, ShowOverViewID = 1, Title = "Title", TotalEpisodes = 12 };
-            } else 
-            {
-                return null;
+                if (show.ShowID == ShowID)
+                {
+                    return show;
+                }
             }
-            
+            return null;
         }
 
         public ShowDTO Get(int ShowID, int ShowOverviewID)
         {
-            if (ShowID == 1 || ShowOverviewID == 1)
+            foreach(var show in shows.ToList())
             {
-                return new ShowDTO { ShowID = ShowID, Picture = "Path/Location/image.png", CurrentEpisode = 0, Description = "test", LastEdited = DateTime.UtcNow, ShowOverViewID = ShowOverviewID, Title = "Title", TotalEpisodes = 12 };
+                if (show.ShowID == ShowID && show.ShowOverViewID == ShowOverviewID)
+                {
+                    return show;
+                }
             }
-            else
-            {
-                return null;
-            }
+            return null;
         }
 
         public int Update(ShowDTO showUpdate)
         {
-            return 1;
+            foreach (var show in shows.ToList())
+            {
+                if (show.ShowID == showUpdate.ShowID)
+                {
+                    shows.Remove(show);
+                    shows.Add(showUpdate);
+                    return 1;
+                }
+            }
+            return 0;
         }
 
         public int Delete(int ShowID)
         {
-            return 1;
+            foreach(var show in shows.ToList())
+            {
+                if (show.ShowID == ShowID)
+                {
+                    shows.Remove(show);
+                    return 1;
+                }
+            }
+            return 0;
         }
     }
 }

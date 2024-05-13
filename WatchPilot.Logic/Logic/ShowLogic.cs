@@ -58,13 +58,24 @@ namespace WatchPilot.Logic.Logic
             try
             {
                 ShowValidation(show);
-                _showDAO.Add(show);
+                
+                if (_showDAO.Add(show) > 0)
+                {
+                    Console.WriteLine("Show Added");
+                }
+                else
+                {
+                    throw new UnkownErrorException();
+                }
+
+
             } catch (Exception e)
             {
                 if (e is ShowException)
                 {
                     throw;
                 }
+                
 
                 throw new UnkownErrorException();
             }
@@ -164,7 +175,14 @@ namespace WatchPilot.Logic.Logic
                     }
                 }
 
-                _showDAO.Update(showUpdate);
+                if (_showDAO.Update(showUpdate) > 0)
+                {
+                    Console.WriteLine("Show Updated");
+                }
+                else
+                {
+                    throw new UnkownErrorException();
+                }
             }
             catch (Exception e)
             {
@@ -188,7 +206,13 @@ namespace WatchPilot.Logic.Logic
                     throw new UnkownErrorException();
                 }
 
-                _showDAO.Delete(showID);
+                if (_showDAO.Delete(showID) > 0)
+                {
+                    Console.WriteLine("Show Deleted");
+                } else
+                {
+                    throw new UnkownErrorException();
+                }
                 
             }
             catch (Exception e)
