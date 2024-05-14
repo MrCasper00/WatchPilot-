@@ -9,6 +9,7 @@ using WatchPilot.Logic.Exceptions;
 using WatchPilot.Logic.Interfaces;
 using BCrypt.Net;
 using System.Net.Http.Headers;
+using WatchPilot.Logic.Entities;
 
 namespace WatchPilot.Logic.Logic
 {
@@ -26,42 +27,22 @@ namespace WatchPilot.Logic.Logic
             this.userDAO = userDAO;
         }
 
-        private void ValidateUser(string username, string password)
+        public UserDTO CreateUser(User userToCreate)
         {
-            if (string.IsNullOrEmpty(username))
+            string hashedPassword = BCrypt.Net.BCrypt.HashPassword(userToCreate.Password, workFactor: 15);
+            UserDTO user = new UserDTO
             {
-                throw new UsernameException("username cannot be empty");
-            }
-            if (username.Length > maxUsernameLength || username.Length < minUsernameLength)
-            {
-                throw new UsernameException("username cannot be longer than 50 characters or shorter than 1");
-            }
-            if (string.IsNullOrEmpty(password))
-            {
-                throw new PasswordException("password cannot be empty");
-            }
-            if (password.Length > maxPasswordLength || password.Length < minPasswordLength)
-            {
-                throw new PasswordException("password cannot be longer than 50 characters or shorter than 1");
-            }
-
-        }
-
-
-        public UserDTO CreateUser(string username, string password)
-        {
-            
-            ValidateUser(username, password);
-            
-            string hashedPassword = BCrypt.Net.BCrypt.HashPassword(password, workFactor: 15);
+                Username = userToCreate.Username,
+                Password = hashedPassword
+            };
 
             try
             {
-                if (userDAO.Get(username) == null)
+                if (userDAO.GetByUsername(user) == null)
                 {
                     try
                     {
-                        UserDTO newUser = userDAO.Add(username, hashedPassword);
+                        UserDTO newUser = userDAO.Add(user);
                         Console.WriteLine("User Succesfully created");
                         return newUser;
                     }
@@ -86,18 +67,22 @@ namespace WatchPilot.Logic.Logic
         }
 
 
-        public UserDTO LoginUser(string username, string password)
+        public UserDTO LoginUser(User userToLogin)
         {
-            ValidateUser(username, password);
+            UserDTO user = new UserDTO
+            {
+                Username = userToLogin.Username,
+                Password = userToLogin.Password
+            };
 
             try
             {
-                UserDTO userDTO = userDAO.Get(username);
+                UserDTO userDTO = userDAO.GetByUsername(user);
                 if (userDTO == null)
                 {
                     throw new UserInfoNoMatchException();
                 }
-                if (!BCrypt.Net.BCrypt.Verify(password, userDTO.Password))
+                if (!BCrypt.Net.BCrypt.Verify(user.Password, userDTO.Password))
                 {
                     throw new UserInfoNoMatchException();
                 }
@@ -116,14 +101,19 @@ namespace WatchPilot.Logic.Logic
         }
 
 
-        public UserDTO ObtainUser(int id)
+        public UserDTO ObtainUser(User userToGet)
         {
-            if (id < minValidId)
+            UserDTO user = new UserDTO
+            {
+                UserID = userToGet.UserID
+            };
+
+            if (user.UserID < minValidId)
             {
                 throw new ArgumentException("id cannot be less than 1");
             }
 
-            UserDTO userDTO = userDAO.Get(id);
+            UserDTO userDTO = userDAO.GetByID(user);
 
             if (userDTO == null)
             {

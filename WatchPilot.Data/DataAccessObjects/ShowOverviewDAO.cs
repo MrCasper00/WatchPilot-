@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using WatchPilot.Data.Entities;
+using WatchPilot.Logic.Entities;
 using WatchPilot.Logic.DataTransferObjects;
 using WatchPilot.Logic.Interfaces;
 

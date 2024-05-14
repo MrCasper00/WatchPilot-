@@ -4,15 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WatchPilot.Logic.DataTransferObjects;
+using WatchPilot.Logic.Entities;
 
 namespace WatchPilot.Logic.Interfaces
 {
     public interface IUserLogic
     {
-        UserDTO ObtainUser(int id);
-        UserDTO LoginUser(string username, string password);
+        UserDTO ObtainUser(User userToGet);
+        UserDTO LoginUser(User userToLogin);
 
-        UserDTO CreateUser(string username, string password);
+        UserDTO CreateUser(User userToCreate);
 
 
     }

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WatchPilot.Data.Entities
+namespace WatchPilot.Logic.Entities
 {
     public class ShowOverview
     {

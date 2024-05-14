@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
-using WatchPilot.Data.Entities;
+using WatchPilot.Logic.Entities;
 using WatchPilot.Logic.DataTransferObjects;
 using WatchPilot.Logic.Exceptions;
 using WatchPilot.Logic.Interfaces;

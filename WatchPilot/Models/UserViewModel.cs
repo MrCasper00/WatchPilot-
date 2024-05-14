@@ -23,7 +23,7 @@ namespace WatchPilot.Models
         {
             return new UserViewModel
             {
-                UserID = userDTO.UserID,
+                UserID = (int)userDTO.UserID,
                 Username = userDTO.Username
             };
         }

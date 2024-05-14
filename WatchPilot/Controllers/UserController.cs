@@ -7,7 +7,7 @@ using WatchPilot.Logic.Exceptions;
 using WatchPilot.Logic.Interfaces;
 using WatchPilot.Models;
 using Microsoft.AspNetCore.Authorization;
-using WatchPilot.Data.Entities;
+using WatchPilot.Logic.Entities;
 
 namespace WatchPilot.Controllers
 {
@@ -37,7 +37,9 @@ namespace WatchPilot.Controllers
         {
             try
             {
-                UserDTO user = _UserLogic.CreateUser(register.Username, register.Password);
+                WatchPilot.Logic.Entities.User UserInput = new WatchPilot.Logic.Entities.User(username: register.Username, password: register.Password, userID: null);
+
+                UserDTO user = _UserLogic.CreateUser(UserInput);
 
             } catch (UserAlreadyExistsException ex)
             {
@@ -69,7 +71,9 @@ namespace WatchPilot.Controllers
         {   
             try
             {
-                UserDTO user = _UserLogic.LoginUser(login.Username, login.Password);
+                WatchPilot.Logic.Entities.User UserInput = new WatchPilot.Logic.Entities.User(username: login.Username, password: login.Password, userID: null);
+
+                UserDTO user = _UserLogic.LoginUser(UserInput);
 
                 var claims = new List<Claim>
                 {
@@ -119,7 +123,9 @@ namespace WatchPilot.Controllers
             int userId = int.Parse(userIdstring);
             try
             {
-                UserDTO user = _UserLogic.ObtainUser(userId);
+                WatchPilot.Logic.Entities.User UserInput = new WatchPilot.Logic.Entities.User(username: null, password: null, userID: userId);
+
+                UserDTO user = _UserLogic.ObtainUser(UserInput);
                 UserViewModel ViewModel = new UserViewModel().FromDTO(user);
 
 
