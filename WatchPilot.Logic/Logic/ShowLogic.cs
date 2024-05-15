@@ -21,7 +21,7 @@ namespace WatchPilot.Logic.Logic
 
         private void ShowValidation(ShowDTO show)
         {
-            if (show.Title.Length > 50 || show.Title.Length < 1 || show.Title == null)
+            if (show.Title == null || show.Title.Length > 50 || show.Title.Length < 1)
             {
                 throw new ShowException("Title must be between 1 and 50 characters");
             }
@@ -29,7 +29,7 @@ namespace WatchPilot.Logic.Logic
             {
                 throw new ShowException("Total episodes must be greater than 0");
             }
-            if (show.Description.Length <= 0 || show.Description == null)
+            if (show.Description == null || show.Description.Length <= 0)
             {
                 throw new ShowException("Description cannot be empty");
             }
@@ -41,6 +41,7 @@ namespace WatchPilot.Logic.Logic
         {
             try
             {
+                
                 ShowOverviewDTO test = _showOverviewDAO.Get((int)show.ShowOverViewID);
                 if (test.UserID != userID)
                 {
@@ -58,7 +59,7 @@ namespace WatchPilot.Logic.Logic
             try
             {
                 ShowValidation(show);
-                
+
                 if (_showDAO.Add(show) > 0)
                 {
                     Console.WriteLine("Show Added");

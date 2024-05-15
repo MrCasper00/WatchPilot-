@@ -29,6 +29,7 @@ namespace WatchPilot.Logic.Logic
 
         public UserDTO CreateUser(User userToCreate)
         {
+            
             string hashedPassword = BCrypt.Net.BCrypt.HashPassword(userToCreate.Password, workFactor: 15);
             UserDTO user = new UserDTO
             {
@@ -105,7 +106,7 @@ namespace WatchPilot.Logic.Logic
         {
             UserDTO user = new UserDTO
             {
-                UserID = userToGet.UserID
+                UserID = (int)userToGet.UserID
             };
 
             if (user.UserID < minValidId)

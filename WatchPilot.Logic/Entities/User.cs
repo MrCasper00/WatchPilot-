@@ -24,7 +24,7 @@ namespace WatchPilot.Logic.Entities
 
             if (password != null)
             {
-                ValidateUsername(password);
+                ValidatePassword(password);
                 this.Password = password;
             }
 

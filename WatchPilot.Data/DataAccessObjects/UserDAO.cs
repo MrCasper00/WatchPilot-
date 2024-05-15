@@ -48,16 +48,6 @@ namespace WatchPilot.Data.DataAccessObjects
             return GetByID(user);
         }
 
-        public void Update(User user)
-        {
-
-        }
-
-        public void Delete(User user)
-        {
-
-        }
-
         public UserDTO GetByUsername(UserDTO userToGet)
         {
             if (userToGet.Username == null)
@@ -65,16 +55,15 @@ namespace WatchPilot.Data.DataAccessObjects
                 throw new Exception("Username is null");
             }
 
-            User user = databaseConnection.ExecuteQuery(
+            UserDTO user = databaseConnection.ExecuteQuery(
               $"SELECT * FROM dbo.[user] where username = '{userToGet.Username}'",
-              reader =>
+              reader => new UserDTO
               {
-                  int userID = int.Parse(reader["UserID"].ToString());
-                  string username = reader["Username"].ToString();
-                  string password = reader["Password"].ToString();
-                  return new User(username, password, userID);
+                  UserID = int.Parse(reader["UserID"].ToString()),
+                  Username = reader["Username"].ToString(),
+                  Password = reader["Password"].ToString()
               }
-                );
+              );
 
             return ToDTO(user);
         }
@@ -86,21 +75,21 @@ namespace WatchPilot.Data.DataAccessObjects
                 throw new Exception("UserID is null");
             }
 
-            User user = databaseConnection.ExecuteQuery(
+            UserDTO user = databaseConnection.ExecuteQuery(
               $"SELECT * FROM dbo.[user] WHERE UserID = {userToGet.UserID}",
-              reader =>
+              reader => new UserDTO
               {
-                  int userID = int.Parse(reader["UserID"].ToString());
-                  string username = reader["Username"].ToString();
-                  string password = reader["Password"].ToString();
-                  return new User(username, password, userID);
-                }
-                );
+                  UserID = int.Parse(reader["UserID"].ToString()),
+                  Username = reader["Username"].ToString(),
+                  Password = reader["Password"].ToString()
+              }
+              );
+              
 
             return ToDTO(user);
         }
 
-        private UserDTO ToDTO(User user)
+        private UserDTO ToDTO(UserDTO user)
         {
             return user == null ? null : new UserDTO
             {

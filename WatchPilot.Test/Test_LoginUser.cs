@@ -7,87 +7,89 @@ using WatchPilot.Logic.Interfaces;
 using WatchPilot.Logic.Logic;
 using WatchPilot.Logic.DataTransferObjects;
 using WatchPilot.Logic.Exceptions;
+using WatchPilot.Logic.Entities;    
 
-//namespace WatchPilot.Test
-//{
-//    public class Test_LoginUser
-//    {
-//        private IUserLogic userLogic;
+namespace WatchPilot.Test
+{
+    public class Test_LoginUser
+    {
+        private IUserLogic userLogic;
 
-//        [SetUp]
-//        public void Setup()
-//        {
-//            MockUserDAO mockUserDAO = new MockUserDAO();
-//            userLogic = new UserLogic(mockUserDAO);
-//            string hashedPassword = BCrypt.Net.BCrypt.HashPassword("TestPassword", workFactor: 15);
-//            mockUserDAO.Add("TestUser", hashedPassword);
-//        }
+        [SetUp]
+        public void Setup()
+        {
+            MockUserDAO mockUserDAO = new MockUserDAO();
+            userLogic = new UserLogic(mockUserDAO);
+            string hashedPassword = BCrypt.Net.BCrypt.HashPassword("TestPassword", workFactor: 15);
+            UserDTO userToAdd = new UserDTO
+            {
+                Username = "TestUser",
+                Password = hashedPassword
+            };
 
-//        [Test]
-//        public void LoginUser_ExpectedBehavior()
-//        {
-//            UserDTO user = userLogic.LoginUser("TestUser", "TestPassword");
+            mockUserDAO.Add(userToAdd);
+        }
 
-//            Assert.AreEqual(1, user.UserID);
-//            Assert.AreEqual("TestUser", user.Username);
-//            Assert.IsTrue(BCrypt.Net.BCrypt.Verify("TestPassword", user.Password));
-//        }
-
-//        [Test]
-//        public void LoginUser_ThrowsExceptionForInvalidPassword()
-//        {
-//            Assert.Throws<UserInfoNoMatchException>(() => userLogic.LoginUser("TestUser", "InvalidPassword"));
-//        }
-
-//        [Test]
-//        public void LoginUser_ThrowsExceptionForInvalidUser()
-//        {
-//            Assert.Throws<UserInfoNoMatchException>(() => userLogic.LoginUser("InvalidUser", "TestPassword"));
-//        }
-
-//        [Test]
-//        public void LoginUser_ThrowsExceptionForInvalidUserAndPassword()
-//        {
-//            Assert.Throws<UserInfoNoMatchException>(() => userLogic.LoginUser("InvalidUser", "InvalidPassword"));
-//        }
-
-//        [Test]
-//        public void LoginUser_ThrowsExceptionForToLongUser()
-//        {
-//            Assert.Throws<UsernameException>(() => userLogic.LoginUser("123456789012345678901234567890123456789012345678901234567890", "TestPassword"));
-//        }
+        [Test]
+        public void LoginUser_ExpectedBehavior()
+        {
+            User userToLogin = new User
+            (
+                username: "TestUser",
+                password: "TestPassword",
+                userID: null
+            );
 
 
-//        [Test]
-//        public void LoginUser_ThrowsExceptionForToLongPassword()
-//        {
-//            Assert.Throws<PasswordException>(() => userLogic.LoginUser("TestUser", "123456789012345678901234567890123456789012345678901234567890"));
-//        }
+            UserDTO user = userLogic.LoginUser(userToLogin);
 
-//        [Test]
-//        public void LoginUser_ThrowsExceptionForToLongUserAndPassword()
-//        {
-//            Assert.Throws<UsernameException>(() => userLogic.LoginUser("123456789012345678901234567890123456789012345678901234567890", "123456789012345678901234567890123456789012345678901234567890"));
-//        }
+            Assert.AreEqual(1, user.UserID);
+            Assert.AreEqual("TestUser", user.Username);
+            Assert.IsTrue(BCrypt.Net.BCrypt.Verify("TestPassword", user.Password));
+        }
 
-//        [Test]
-//        public void LoginUser_ThrowsExceptionForEmptyPassword()
-//        {
-//            Assert.Throws<PasswordException>(() => userLogic.LoginUser("TestUser", ""));
-//        }
+        [Test]
+        public void LoginUser_ThrowsExceptionForInvalidPassword()
+        {
+            User userToLogin = new User
+            (
+                username: "TestUser",
+                password: "InvalidPassword",
+                userID: null
+            );
 
-//        [Test]
-//        public void LoginUser_ThrowsExceptionForEmptyUser()
-//        {
-//            Assert.Throws<UsernameException>(() => userLogic.LoginUser("", "TestPassword"));
-//        }
+            Assert.Throws<UserInfoNoMatchException>(() => userLogic.LoginUser(userToLogin));
+        }
 
-//        [Test]
-//        public void LoginUser_ThrowsExceptionForEmptyUserAndPassword()
-//        {
-//            Assert.Throws<UsernameException>(() => userLogic.LoginUser("", ""));
-//        }
+        [Test]
+        public void LoginUser_ThrowsExceptionForInvalidUser()
+        {
+            User userToLogin = new User
+            (
+                username: "InvalidUser",
+                password: "TestPassword",
+                userID: null
+            );
+
+            Assert.Throws<UserInfoNoMatchException>(() => userLogic.LoginUser(userToLogin));
+        }
 
 
-//    }
-//}
+        [Test]
+        public void LoginUser_ThrowsExceptionForInvalidUserAndPassword()
+        {
+            User userToLogin = new User
+            (
+                username: "InvalidUser",
+                password: "InvalidPassword",
+                userID: null
+            );
+
+            Assert.Throws<UserInfoNoMatchException>(() => userLogic.LoginUser(userToLogin));
+        }
+
+
+
+
+    }
+}

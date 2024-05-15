@@ -101,10 +101,10 @@ namespace WatchPilot.Test
         [Test]
         public void TestAddShow_NullTitle()
         {
-            string showName = null;
+            
             ShowDTO show = new ShowDTO()
             {
-                Title = showName,
+                Title = null,
                 Description = "TestDescription",
                 ShowOverViewID = 1,
                 Picture = "TestPicture",

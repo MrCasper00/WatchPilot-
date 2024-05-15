@@ -37,7 +37,7 @@ namespace WatchPilot.Controllers
         {
             try
             {
-                WatchPilot.Logic.Entities.User UserInput = new WatchPilot.Logic.Entities.User(username: register.Username, password: register.Password, userID: null);
+                User UserInput = new User(username: register.Username, password: register.Password, userID: null);
 
                 UserDTO user = _UserLogic.CreateUser(UserInput);
 
@@ -71,7 +71,7 @@ namespace WatchPilot.Controllers
         {   
             try
             {
-                WatchPilot.Logic.Entities.User UserInput = new WatchPilot.Logic.Entities.User(username: login.Username, password: login.Password, userID: null);
+                User UserInput = new User(username: login.Username, password: login.Password, userID: null);
 
                 UserDTO user = _UserLogic.LoginUser(UserInput);
 
@@ -123,7 +123,7 @@ namespace WatchPilot.Controllers
             int userId = int.Parse(userIdstring);
             try
             {
-                WatchPilot.Logic.Entities.User UserInput = new WatchPilot.Logic.Entities.User(username: null, password: null, userID: userId);
+                User UserInput = new User(username: null, password: null, userID: userId);
 
                 UserDTO user = _UserLogic.ObtainUser(UserInput);
                 UserViewModel ViewModel = new UserViewModel().FromDTO(user);
